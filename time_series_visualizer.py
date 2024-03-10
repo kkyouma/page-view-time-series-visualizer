@@ -31,9 +31,33 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df["month"] = df.index.month
+    df["year"] = df.index.year
+
+    df_bar = df.groupby(["year", "month"])["value"].mean().unstack()
 
     # Draw bar plot
+
+    fig = df_bar.plot.bar(
+        legend=True, xlabel="Years", ylabel="Average Page Views", figsize=(8, 7)
+    )
+    plt.legend(
+        [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ],
+        title="Months",
+    )
 
     # Save image and return fig (don't change this part)
     fig.savefig("bar_plot.png")
