@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
+import locale
 
 register_matplotlib_converters()
 
@@ -40,7 +41,7 @@ def draw_bar_plot():
 
     fig = df_bar.plot.bar(
         legend=True, xlabel="Years", ylabel="Average Page Views", figsize=(8, 7)
-    )
+    ).figure
     plt.legend(
         [
             "January",
@@ -65,6 +66,7 @@ def draw_bar_plot():
 
 
 def draw_box_plot():
+    locale.setlocale(locale.LC_TIME, "en_US.UTF-8")
     # Prepare data for box plots (this part is done!)
     df_box = df.copy()
     df_box.reset_index(inplace=True)
@@ -74,10 +76,11 @@ def draw_box_plot():
     # Draw box plots (using Seaborn)
     df_box["month_num"] = df_box["date"].dt.month
     df_box = df_box.sort_values("month_num")
+    df_box["month"] = df_box["month"]
 
     fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
-    axs[0] = sns.boxplot(x=df_box["year"], y=df_box["value"], ax=axs[0])
-    axs[1] = sns.boxplot(x=df_box["month"], y=df_box["value"], ax=axs[1])
+    sns.boxplot(x=df_box["year"], y=df_box["value"], ax=axs[0])
+    sns.boxplot(x=df_box["month"], y=df_box["value"], ax=axs[1])
 
     axs[0].set_title("Year-wise Box Plot (Trend)")
     axs[0].set_ylabel("Page Views")
